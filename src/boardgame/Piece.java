@@ -8,7 +8,6 @@ public class Piece {
 	//Construtores
 	
 	public Piece(Board board) {
-		super();
 		this.board = board;
 		position = null;
 	}
