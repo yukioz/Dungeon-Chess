@@ -3,6 +3,8 @@ package Chess;
 import Chess.pieces.King;
 import Chess.pieces.Rook;
 import boardgame.Board;
+import boardgame.Piece;
+import boardgame.Position;
 
 public class ChessMatch {
 
@@ -32,8 +34,37 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+		Position source = sourcePosition.toPosition();
+		Position target = targetPosition.toPosition();
+		
+		validadeSourcePosition(source);
+		Piece capturedPiece = makeMove(source, target);
+		
+		return (ChessPiece)capturedPiece;
+	}
+	
+	private void validadeSourcePosition(Position position) {
+		
+		if(!board.thereIsAPiece(position)) {
+			throw new ChessException("There is no piece on source position!");
+		}
+	}
+	
+	private Piece makeMove(Position source, Position target) {
+		
+		Piece p = board.removePiece(source);
+		Piece capturedPiece = board.removePiece(target);
+		
+		//Coloca P no target, substituindo a peça
+		board.placePiece(p, target);
+		
+		return capturedPiece;
+	}
+	
+	//Initial Setup é a unica que chama essa função para alocar peça com letra e número.
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
-		board.placePiace(piece, new ChessPosition(column, row).toPosition());
+		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 	}
 	
 	public void initialSetup() {
