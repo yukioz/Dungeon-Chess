@@ -32,7 +32,11 @@ public class Position {
 	
 	//Métodos
 	
-	
+	public void setValues(int row, int column) {
+		
+		this.row = row;
+		this.column = column;
+	}
 	
 		//ToString
 	@Override
