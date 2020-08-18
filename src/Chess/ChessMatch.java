@@ -1,5 +1,8 @@
 package Chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Chess.pieces.King;
 import Chess.pieces.Rook;
 import boardgame.Board;
@@ -12,6 +15,9 @@ public class ChessMatch {
 	private Board board;
 	private int turn;
 	private Color currentPlayer;
+	
+	private List<Piece> piecesOnTheBoard = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 	
 	//Constutores
 	
@@ -103,12 +109,19 @@ public class ChessMatch {
 		//Coloca P no target, substituindo a peça
 		board.placePiece(p, target);
 		
+		if(capturedPiece != null) {
+			
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
+		
 		return capturedPiece;
 	}
 	
 	//Initial Setup é a unica que chama essa função para alocar peça com letra e número.
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 	
 	public void initialSetup() {
