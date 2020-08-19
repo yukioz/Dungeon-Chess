@@ -17,10 +17,10 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
 	private boolean check;
+	private boolean checkmate;
 	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
-	private Object collectors;
 	
 	//Constutores
 	
@@ -48,6 +48,10 @@ public class ChessMatch {
 	public boolean getCheck() {
 		
 		return check;
+	}
+	
+	public boolean getCheckmate() {
+		return checkmate;
 	}
 	
 	//Métodos
@@ -94,8 +98,13 @@ public class ChessMatch {
 		
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 
-		nextTurn();
-		
+		if(testCheckmate(opponent(currentPlayer))) {
+			
+			checkmate = true;
+		}
+		else {
+			nextTurn();
+		}
 		return (ChessPiece)capturedPiece;
 	}
 	
@@ -181,6 +190,38 @@ public class ChessMatch {
 		}
 		return false;
 		
+	}
+	
+	private boolean testCheckmate(Color color) {
+		
+		if(testCheck(color) != true) {
+			return false;
+		}
+		
+		List<Piece> list = piecesOnTheBoard.stream().filter(x->((ChessPiece)x).getColor() == color).collect(Collectors.toList());
+		
+		for(Piece p : list) {
+			
+			boolean[][] mat = p.possibleMoves();
+			
+			for(int i=0; i < board.getRows() ; i++) {
+				for(int j=0; j < board.getColumns() ; j++) {
+					if(mat[i][j]) {
+						Position source = ((ChessPiece)p).getChessPosition().toPosition();
+						Position target = new Position(i, j);
+						Piece capturedPiece = makeMove(source, target);
+						boolean testeCheck = testCheck(color);
+						undoMove(source, target, capturedPiece);
+						
+						if(!testeCheck) {
+							return false;
+						}
+					}
+				}
+			}
+			
+		}
+		return true;
 	}
 	
 	//Initial Setup é a unica que chama essa função para alocar peça com letra e número.

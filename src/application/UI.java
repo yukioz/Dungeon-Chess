@@ -64,13 +64,19 @@ public class UI {
 		printCapturedPieces(captured);
 		System.out.println();
 		
-		System.out.println("turn : " + chessMatch.getTurn());
-		System.out.println("Waiting player : " + chessMatch.getCurrentPlayer());
+		if(!chessMatch.getCheckmate()) {
 		
-		if(chessMatch.getCheck() == true) {
-			System.out.println("CHECK!");
+			System.out.println("turn : " + chessMatch.getTurn());
+			System.out.println("Waiting player : " + chessMatch.getCurrentPlayer());
+			
+			if(chessMatch.getCheck() == true) {
+				System.out.println("CHECK!");
+			}
 		}
-		
+		else {
+			System.out.println("Check com tomates!");
+			System.out.println("Winner: " + chessMatch.getCurrentPlayer());
+		}
 	}
 	
 	//Printa o tabuleiro quadrado
